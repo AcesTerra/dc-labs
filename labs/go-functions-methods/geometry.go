@@ -81,7 +81,7 @@ func main(){
 	}
 	//fmt.Printf("%T, %v", s, s)
 	fmt.Println(sides)
-	points := []Point{}
+	var points Path
 	for i := 0; i < sides; i++{
 		fmt.Println(i)
 		randomNumbers := []float64{}
@@ -94,9 +94,9 @@ func main(){
 		randP.SetY(randomNumbers[1])
 		fmt.Println(randP)
         	points = append(points, randP)
-		//path := Path[points]
+		//path := Path{points}
 		//path = append(path, points)
-		//fmt.Println(path)
+		fmt.Println(points)
 	}
 	fmt.Println(sides)
 }
