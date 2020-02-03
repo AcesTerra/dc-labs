@@ -81,6 +81,8 @@ func main(){
 	if s, err := strconv.Atoi(os.Args[1]); err == nil {
 		sides = s
 	}
+	fmt.Printf("Generating a %v sides figure", sides)
+	fmt.Println("Figure's vertices:")
 	//fmt.Printf("%T, %v", s, s)
 	//fmt.Println(sides)
 	var path Path
@@ -94,13 +96,14 @@ func main(){
 		var randP = Point{}
 		randP.SetX(randomNumbers[0])
 		randP.SetY(randomNumbers[1])
-		//fmt.Println(randP)
+		fmt.Println(randP)
         	path = append(path, randP)
 		//path := Path{points}
 		//path = append(path, points)
 		//fmt.Println(path.Distance())
 		//fmt.Println(d)
 	}
+	fmt.Println("Figure's perimeter:")
 	fmt.Println(path.Distance())
 }
 
