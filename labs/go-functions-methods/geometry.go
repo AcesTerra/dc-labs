@@ -18,17 +18,33 @@ import (
 )
 
 type Point struct{
-	X, Y float64
+	x, y float64
+}
+
+func (p *Point) SetX(x float64) {
+ 	p.x = x
+}
+
+func (p Point) GetX() float64 {
+ 	return p.x
+}
+
+func (p *Point) SetY(y float64) {
+        p.y = y
+}
+
+func (p Point) GetY() float64 {
+        return p.y
 }
 
 // traditional function
 func Distance(p, q Point) float64 {
-	return math.Hypot(q.X-p.X, q.Y-p.Y)
+	return math.Hypot(q.GetX()-p.GetX(), q.GetY()-p.GetY())
 }
 
 // same thing, but as a method of the Point type
 func (p Point) Distance(q Point) float64 {
-	return math.Hypot(q.X-p.X, q.Y-p.Y)
+	return math.Hypot(q.GetX()-p.GetX(), q.GetY()-p.GetY())
 }
 
 //!-point
@@ -70,9 +86,11 @@ func main(){
 			//x := rand.Intn(101)
 			//y := rand.Intn(101)
 			//fmt.Println(randomNumbers[1])
-			var p = Point{randomNumbers[0], randomNumbers[1]}
-			fmt.Println(p)
-        		sides = append(sides, p)
+			var randP = Point{}
+			randP.SetX(randomNumbers[0])
+			randP.SetY(randomNumbers[1])
+			fmt.Println(randP)
+        		sides = append(sides, randP)
 		}
 	}
 	fmt.Println(sides)
