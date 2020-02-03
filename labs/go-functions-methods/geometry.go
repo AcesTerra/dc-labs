@@ -74,24 +74,29 @@ func randFloats(min, max float64, n int) []float64 {
 }
 
 func main(){
-        sides := []Point{}
-        fmt.Println(sides)
+        sides := 0
 	rand.Seed(time.Now().UnixNano())
 	if s, err := strconv.Atoi(os.Args[1]); err == nil {
-		//fmt.Printf("%T, %v", s, s)
-		for i := 0; i < s; i++{
-			fmt.Println(i)
-			randomNumbers := []float64{}
-			randomNumbers = randFloats(-100, 100, 2)
-			//x := rand.Intn(101)
-			//y := rand.Intn(101)
-			//fmt.Println(randomNumbers[1])
-			var randP = Point{}
-			randP.SetX(randomNumbers[0])
-			randP.SetY(randomNumbers[1])
-			fmt.Println(randP)
-        		sides = append(sides, randP)
-		}
+		sides = s
+	}
+	//fmt.Printf("%T, %v", s, s)
+	fmt.Println(sides)
+	points := []Point{}
+	for i := 0; i < sides; i++{
+		fmt.Println(i)
+		randomNumbers := []float64{}
+		randomNumbers = randFloats(-100, 100, 2)
+		//x := rand.Intn(101)
+		//y := rand.Intn(101)
+		//fmt.Println(randomNumbers[1])
+		var randP = Point{}
+		randP.SetX(randomNumbers[0])
+		randP.SetY(randomNumbers[1])
+		fmt.Println(randP)
+        	points = append(points, randP)
+		//path := Path[points]
+		//path = append(path, points)
+		//fmt.Println(path)
 	}
 	fmt.Println(sides)
 }
