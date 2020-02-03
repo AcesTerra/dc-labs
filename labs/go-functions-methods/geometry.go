@@ -5,11 +5,21 @@
 
 // Package geometry defines simple types for plane geometry.
 //!+point
-package geometry
+package main
+//package geometry
 
-import "math"
+import (
+	"math"
+	"math/rand"
+	"fmt"
+	"os"
+	"strconv"
+	"time"
+)
 
-type Point struct{ X, Y float64 }
+type Point struct{
+	X, Y float64
+}
 
 // traditional function
 func Distance(p, q Point) float64 {
@@ -37,6 +47,35 @@ func (path Path) Distance() float64 {
 		}
 	}
 	return sum
+}
+
+func randFloats(min, max float64, n int) []float64 {
+	res := make([]float64, n)
+	for i := range res {
+		res[i] = min + rand.Float64()*(max-min)
+	}
+	return res
+}
+
+func main(){
+        sides := []Point{}
+        fmt.Println(sides)
+	rand.Seed(time.Now().UnixNano())
+	if s, err := strconv.Atoi(os.Args[1]); err == nil {
+		//fmt.Printf("%T, %v", s, s)
+		for i := 0; i < s; i++{
+			fmt.Println(i)
+			randomNumbers := []float64{}
+			randomNumbers = randFloats(-100, 100, 2)
+			//x := rand.Intn(101)
+			//y := rand.Intn(101)
+			//fmt.Println(randomNumbers[1])
+			var p = Point{randomNumbers[0], randomNumbers[1]}
+			fmt.Println(p)
+        		sides = append(sides, p)
+		}
+	}
+	fmt.Println(sides)
 }
 
 //!-path
