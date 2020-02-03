@@ -57,11 +57,13 @@ type Path []Point
 // Distance returns the distance traveled along the path.
 func (path Path) Distance() float64 {
 	sum := 0.0
-	for i := range path {
+	//fmt.Println("Flag")
+	for i:= range path {
 		if i > 0 {
 			sum += path[i-1].Distance(path[i])
 		}
 	}
+	//fmt.Println(sum)
 	return sum
 }
 
@@ -80,10 +82,10 @@ func main(){
 		sides = s
 	}
 	//fmt.Printf("%T, %v", s, s)
-	fmt.Println(sides)
-	var points Path
+	//fmt.Println(sides)
+	var path Path
 	for i := 0; i < sides; i++{
-		fmt.Println(i)
+		//fmt.Println(i)
 		randomNumbers := []float64{}
 		randomNumbers = randFloats(-100, 100, 2)
 		//x := rand.Intn(101)
@@ -92,13 +94,14 @@ func main(){
 		var randP = Point{}
 		randP.SetX(randomNumbers[0])
 		randP.SetY(randomNumbers[1])
-		fmt.Println(randP)
-        	points = append(points, randP)
+		//fmt.Println(randP)
+        	path = append(path, randP)
 		//path := Path{points}
 		//path = append(path, points)
-		fmt.Println(points)
+		//fmt.Println(path.Distance())
+		//fmt.Println(d)
 	}
-	fmt.Println(sides)
+	fmt.Println(path.Distance())
 }
 
 //!-path
