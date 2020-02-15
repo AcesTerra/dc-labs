@@ -25,24 +25,32 @@ func main() {
     	}
     	defer file.Close()
 
-	var textLines []string
+	var rawTextLines []string
 
   	scanner := bufio.NewScanner(file)
     	for scanner.Scan() {
         	//fmt.Println(scanner.Text())
-		textLines = append(textLines, scanner.Text())
+		rawTextLines = append(rawTextLines, scanner.Text())
     	}
 
     	if err := scanner.Err(); err != nil {
         	log.Fatal(err)
     	}
 
-	for _, v := range textLines{
-		fmt.Println(v)
+	var filteredLines []string
+
+	for _, v := range rawTextLines{
+		//fmt.Println(v)
+		testSplitedStr := strings.Split(v, " ")
+		if testSplitedStr[3] == "installed" || testSplitedStr[3] == "upgraded" || testSplitedStr[3] == "removed"{
+			filteredLines = append(filteredLines, v)
+		}
 	}
 	
-	testSplitedStr := strings.Split(textLines[0], " ")
-	for _, v := range testSplitedStr {
+	//testSplitedStr := strings.Split(textLines[0], " ")
+	for _, v := range filteredLines {
 		fmt.Println(v)
 	}
+
+	//fmt.Println(testSplitedStr[3])
 }
