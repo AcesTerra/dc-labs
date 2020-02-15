@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"log"
+	"bufio"
 )
 
 func main() {
@@ -15,4 +17,28 @@ func main() {
 	}
 
 	// Your fun starts here.
+	fmt.Println(os.Args[1])
+	file, err := os.Open(os.Args[1])
+    	if err != nil {
+        	log.Fatal(err)
+    	}
+    	defer file.Close()
+
+	var textLines []string
+
+  	scanner := bufio.NewScanner(file)
+    	for scanner.Scan() {
+        	//fmt.Println(scanner.Text())
+		textLines = append(textLines, scanner.Text())
+    	}
+
+    	if err := scanner.Err(); err != nil {
+        	log.Fatal(err)
+    	}
+
+	for _, v := range textLines{
+		fmt.Println(v)
+	}
+	
+	
 }
