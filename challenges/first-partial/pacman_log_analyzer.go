@@ -5,6 +5,7 @@ import (
 	"os"
 	"log"
 	"bufio"
+	"strings"
 )
 
 func main() {
@@ -40,5 +41,8 @@ func main() {
 		fmt.Println(v)
 	}
 	
-	
+	testSplitedStr := strings.Split(textLines[0], " ")
+	for _, v := range testSplitedStr {
+		fmt.Println(v)
+	}
 }
