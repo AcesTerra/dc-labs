@@ -9,8 +9,17 @@ import (
 	//"reflect"
 )
 
+func drawLine (s int){
+	for i :=  0; i < s; i++ {
+		fmt.Printf("-")
+	}
+	fmt.Printf("\n")
+}
+
 func main() {
-	fmt.Println("Pacman Log Analyzer")
+	title := "Pacman Log Analyzer"
+	fmt.Println(title)
+	drawLine(len(title))
 
 	if len(os.Args) < 2 {
 		fmt.Println("You must send at least one pacman log file to analize")
@@ -40,33 +49,52 @@ func main() {
         	log.Fatal(err)
     	}
 
-	//
+	//Lines that has installed, upgraded or removed
 	var filteredLines [][]string
+	installedCntr := 0
+	upgradedCntr := 0
+	removedCntr := 0
 
 	//Filter lines
 	for _, v := range rawTextLines{
 		//fmt.Println(v)
 		splitedStr := strings.Split(v, " ")
-		if splitedStr[3] == "installed" || splitedStr[3] == "upgraded" || splitedStr[3] == "removed"{
+		if splitedStr[3] == "installed"{
 			filteredLines = append(filteredLines, splitedStr)
+			installedCntr++
+		}
+		if splitedStr[3] == "upgraded"{
+			filteredLines = append(filteredLines, splitedStr)
+			upgradedCntr++
+		}
+		if splitedStr[3] == "removed"{
+			filteredLines = append(filteredLines, splitedStr)
+			removedCntr++
 		}
 	}
-	
-	//testSplitedStr := strings.Split(textLines[0], " ")
-	//for _, v := range filteredLines {
-		//fmt.Println(v)
-	//}
+
+	//Printing counters
+	fmt.Printf("- Installed packages\t: %d\n", installedCntr)
+	fmt.Printf("- Removeded packages\t: %d\n", removedCntr)
+	fmt.Printf("- Upgraded packages\t: %d\n", upgradedCntr)
+	fmt.Printf("- Currently installed\t: %d\n", installedCntr - removedCntr)
+
+	subtitle := "List of packages"
+	fmt.Println("\n" + subtitle)
+	drawLine(len(subtitle))
 
 	mapPackages := make(map[string][][]string)
 	//x["key"] = append(x["key"], "value")
 	//fmt.Println(filteredLines[0])
 	//mapPackages[string(filteredLines[0][4])] = append(mapPackages[string(filteredLines[0][3])], filteredLines[0])
-	fmt.Println(mapPackages)
+	//fmt.Println(mapPackages)
 	for _, v := range filteredLines{
 		mapPackages[string(v[4])] = append(mapPackages[string(v[4])], v)
 		//fmt.Println(v)
 }
 	//splitedStr := strings.Split(filteredLines)
-	fmt.Println(mapPackages)
-	//fmt.Println(reflect.TypeOf(mapPackages))
+	fmt.Println(mapPackages["linux-firmware"][0][0][1:] + " " + mapPackages["linux-firmware"][0][1][:len(mapPackages["linux-firmware"][0][1])-1]) //Show date and time
+	//fmt.Println(mapPackages["linux-firmware"][3][7][:len(mapPackages["linux-firmware"][3][7])-1]) //Show upgraded version
+	//fmt.Println(mapPackages["python2"][0][5][1:len(mapPackages["python2"][0][5])-1]) //Show installed version
+	//fmt.Println(mapPackages)
 }
