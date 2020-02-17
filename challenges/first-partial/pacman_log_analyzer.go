@@ -93,8 +93,39 @@ func main() {
 		//fmt.Println(v)
 }
 	//splitedStr := strings.Split(filteredLines)
-	fmt.Println(mapPackages["linux-firmware"][0][0][1:] + " " + mapPackages["linux-firmware"][0][1][:len(mapPackages["linux-firmware"][0][1])-1]) //Show date and time
+	//fmt.Println(mapPackages["linux-firmware"][0][0][1:] + " " + mapPackages["linux-firmware"][0][1][:len(mapPackages["linux-firmware"][0][1])-1]) //Show date and time
 	//fmt.Println(mapPackages["linux-firmware"][3][7][:len(mapPackages["linux-firmware"][3][7])-1]) //Show upgraded version
 	//fmt.Println(mapPackages["python2"][0][5][1:len(mapPackages["python2"][0][5])-1]) //Show installed version
 	//fmt.Println(mapPackages)
+
+	for i, _ := range mapPackages{
+		//fmt.Println("Key: ", i, "Value: ", v)
+		fmt.Println("- Package Name\t: ", i)
+		fmt.Println("   - Install date\t: ", mapPackages[i][0][0][1:] + " " + mapPackages[i][0][1][:len(mapPackages[i][0][1])-1]) //Show date and time)
+		if len(mapPackages[i]) == 1{
+			fmt.Println("   - Last update date\t: -")
+			fmt.Println("   - How many updates\t: -")
+			fmt.Println("   - Removal date\t: -")
+		}
+		//if len(mapPackages[i]) > 1{
+			//fmt.Println("   - Last update date\t: ", mapPackages[i][len(mapPackages[i])-1][0][1:] + " " + mapPackages[i][len(mapPackages[i])-1][1][:len(mapPackages[i][len(mapPackages[i])-1][1])-1]) //Show date and time))
+		//}
+		if len(mapPackages[i]) > 1 && mapPackages[i][len(mapPackages[i])-1][3] == "removed" && mapPackages[i][len(mapPackages[i])-2][3] == "upgraded"{
+			fmt.Println("   - Last update date\t: ", mapPackages[i][len(mapPackages[i])-2][0][1:] + " " + mapPackages[i][len(mapPackages[i])-2][1][:len(mapPackages[i][len(mapPackages[i])-2][1])-1])
+			fmt.Printf("   - How many updates\t:  %d\n", len(mapPackages[i]) - 2)
+			fmt.Println("   - Removal date\t: ", mapPackages[i][len(mapPackages[i])-1][0][1:] + " " + mapPackages[i][len(mapPackages[i])-2][1][:len(mapPackages[i][len(mapPackages[i])-2][1])-1])
+		}
+		if len(mapPackages[i]) > 1 && mapPackages[i][len(mapPackages[i])-1][3] == "removed" && mapPackages[i][len(mapPackages[i])-2][3] == "installed"{
+			fmt.Println("   - Last update date\t: -")
+			fmt.Println("   - How many updates\t: -")
+			fmt.Println("   - Removal date\t: ", mapPackages[i][len(mapPackages[i])-1][0][1:] + " " + mapPackages[i][len(mapPackages[i])-2][1][:len(mapPackages[i][len(mapPackages[i])-2][1])-1])
+		}
+		if len(mapPackages[i]) > 1 && mapPackages[i][len(mapPackages[i])-1][3] == "upgraded"{
+			fmt.Println("   - Last update date\t: ", mapPackages[i][len(mapPackages[i])-1][0][1:] + " " + mapPackages[i][len(mapPackages[i])-1][1][:len(mapPackages[i][len(mapPackages[i])-1][1])-1])
+			fmt.Printf("   - How many updates\t:  %d\n", len(mapPackages[i]) - 1)
+			fmt.Println("   - Removal date\t: -")
+		}
+		//fmt.Println(mapPackages["ethtool"][len(mapPackages["ethtool"])-1][3])
+	}
+	//fmt.Println(mapPackages["ethtool"][len(mapPackages["ethtool"])-1][3]) //Show action: installed, upgraded or removed
 }

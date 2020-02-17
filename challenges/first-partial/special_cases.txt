@@ -1,0 +1,5 @@
+python-pynacl i-r-i
+python-bcrypt i-r-i
+glide i-u-u-r-i
+libsodium i-r-io
+
