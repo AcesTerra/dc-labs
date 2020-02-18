@@ -17,6 +17,13 @@ import (
 	"strings"
 )
 
+//Function to check error in writing file
+func checkError(err error) {
+    if err != nil {
+	panic(err)
+    }
+}
+
 //Structure to store package information
 type packageInfo struct{
 	PackageName string
@@ -153,24 +160,57 @@ func main() {
 		checkInfo(i, v)
 	}
 
+	//Creating the file to print report
+	f, err := os.Create("packages_report.txt")
+    	checkError(err)
+    	defer f.Close()
+	w := bufio.NewWriter(f)
+
 	//Print headers
 	title := "Pacman Log Analyzer"
 	fmt.Println(title)
 	drawLine(len(title))
+	_, err = fmt.Fprintf(w, "Pacman Log Analizer\n")
+	checkError(err)
+	_, err = fmt.Fprintf(w, "-------------------\n")
+	checkError(err)
 	fmt.Printf("- Installed packages\t: %d\n", installedCntr)
-	fmt.Printf("- Removeded packages\t: %d\n", removedCntr)
+	_, err = fmt.Fprintf(w, "- Installed packages\t: %d\n", installedCntr)
+	checkError(err)
+	fmt.Printf("- Removed packages\t: %d\n", removedCntr)
+	_, err = fmt.Fprintf(w, "- Removeded packages\t: %d\n", removedCntr)
+	checkError(err)
 	fmt.Printf("- Upgraded packages\t: %d\n", upgradedCntr)
+	_, err = fmt.Fprintf(w, "- Upgraded packages\t: %d\n", upgradedCntr)
+	checkError(err)
 	fmt.Printf("- Currently installed\t: %d\n", installedCntr - removedCntr)
+	_, err = fmt.Fprintf(w, "- Currently installed\t: %d\n", installedCntr - removedCntr)
+	checkError(err)
 	subtitle := "List of packages"
 	fmt.Println("\n" + subtitle)
 	drawLine(len(subtitle))
+	_, err = fmt.Fprintf(w, "\nList of packages\n")
+	checkError(err)
+	_, err = fmt.Fprintf(w, "----------------\n")
+	checkError(err)
 
 	//Print all packages and their info
 	for _, i := range allPackages{
 		fmt.Println("- Package name\t:", i.PackageName)
+		_, err = fmt.Fprintf(w, "- Package name\t: %s\n", i.PackageName)
+		checkError(err)
 		fmt.Println("  - Install date\t:", i.InstallDate)
+		_, err = fmt.Fprintf(w, "  - Install date\t: %s\n", i.InstallDate)
+		checkError(err)
 		fmt.Println("  - Last update date\t:", i.LastUpdate)
+		_, err = fmt.Fprintf(w, "  - Last update date\t: %s\n", i.LastUpdate)
+		checkError(err)
 		fmt.Println("  - How many updates\t:", i.Upgrades)
+		_, err = fmt.Fprintf(w, "  - How many updates\t: %d\n", i.Upgrades)
+		checkError(err)
 		fmt.Println("  - Removal date\t:", i.RemovalDate)
+		_, err = fmt.Fprintf(w, "  - Removal date\t: %s\n", i.RemovalDate)
+		checkError(err)
 	}
+	err = f.Close()
 }
