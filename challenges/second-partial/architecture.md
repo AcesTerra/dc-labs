@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Architecture
 ===============================
 
@@ -11,3 +12,7 @@ La arquitectura de la API consiste en un servidor que recibe peticiones en forma
   - `/Logout` - Recibe el token generado del usuario y lo elimina de la lista de usuarios con acceso.
   - `/Upload` - Recibe una imagen enviada por el cliente y regresa el nombre, tamaño y hora a la que fue enviada.
   - `/Status` - Regresa los usuarios logueados en el servidor.
+=======
+Architecture Document
+=====================
+>>>>>>> 667aef6b906eaaffe54094a098f3efff4f875b0f

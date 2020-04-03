@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Guía de usuario
 ===============================
 
@@ -37,3 +38,7 @@ localhost:5000/Status
 ###Ejemplos de Postman
 ![Postman_Login](Postman_Login.png)
 ![Postman_Upload](Postman_Upload.png)
+=======
+User Guide
+==========
+>>>>>>> 667aef6b906eaaffe54094a098f3efff4f875b0f
