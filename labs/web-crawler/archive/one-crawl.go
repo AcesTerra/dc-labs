@@ -17,7 +17,8 @@ func crawl(url string) []string {
 }
 
 func main(){
-	url := "http://www.gopl.io/"
+	//url := "http://www.gopl.io/"
+	url := os.Args[1]
 	testString := crawl(url)
 	for _, v := range testString{
 		fmt.Println(v)

@@ -7,21 +7,20 @@ import(
 	"os"
 )
 
+var tokens = make(chan struct{}, 20)
+
 func crawl(url string) []string {
 	fmt.Println(url)
+	tokens <- struct{}{} // acquire a token
 	list, err := links.Extract(url)
+	<-tokens // release the token
+
 	if err != nil {
 		log.Print(err)
 	}
 	return list
 }
 
-/*func main(){
-	url := "http://www.gopl.io/"
-	testString := crawl(url)
-	for _, v := range testString{
-		fmt.Println(v)
-	}*/
 func main() {
 	worklist := make(chan []string) //Creates a channel that can receive arrays of strings
 
