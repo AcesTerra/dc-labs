@@ -2,7 +2,7 @@ package controller
 
 import (
 	"fmt"
-	"log"
+	//"log"
 	"os"
 	"time"
 
@@ -14,6 +14,8 @@ import (
 )
 
 var controllerAddress = "tcp://localhost:40899"
+var sock mangos.Socket
+var err error
 
 func die(format string, v ...interface{}) {
 	fmt.Fprintln(os.Stderr, fmt.Sprintf(format, v...))
@@ -25,15 +27,25 @@ func date() string {
 }
 
 func Start() {
-	var sock mangos.Socket
-	var err error
 	if sock, err = pub.NewSocket(); err != nil {
 		die("can't get new pub socket: %s", err)
 	}
 	if err = sock.Listen(controllerAddress); err != nil {
 		die("can't listen on pub socket: %s", err.Error())
 	}
+	//if err = sock.Dial(controllerAddress); err != nil {
+	//	die("can't dial on sub socket: %s", err.Error())
+	//}
+	//workerConn, _ = sock.Recv()
+	//fmt.Println(workerConn
 	for {
+		msg, msgErr := sock.Recv()
+		if msgErr != nil{
+			die("Cannot recv: %s", msgErr.Error())
+		}
+		fmt.Println(msg)
+        }
+	/*for {
 		// Could also use sock.RecvMsg to get header
 		d := date()
 		log.Printf("Controller: Publishing Date %s\n", d)
@@ -41,5 +53,5 @@ func Start() {
 			die("Failed publishing: %s", err.Error())
 		}
 		time.Sleep(time.Second * 3)
-	}
+	}*/
 }

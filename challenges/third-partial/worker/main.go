@@ -7,12 +7,14 @@ import (
 	"log"
 	"net"
 	"os"
-
+	"time"
 	pb "github.com/CodersSquad/dc-labs/challenges/third-partial/proto"
 	"go.nanomsg.org/mangos"
-	"go.nanomsg.org/mangos/protocol/sub"
+	//"go.nanomsg.org/mangos/protocol/sub"
 	"google.golang.org/grpc"
-
+	//"go.nanomsg.org/mangos/v3"
+	"go.nanomsg.org/mangos/protocol/respondent"
+	//"go.nanomsg.org/mangos/v3/protocol/surveyor"
 	// register transports
 	_ "go.nanomsg.org/mangos/transport/all"
 )
@@ -37,6 +39,10 @@ func die(format string, v ...interface{}) {
 	os.Exit(1)
 }
 
+func date() string {
+        return time.Now().Format(time.ANSIC)
+}
+
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	log.Printf("RPC: Received: %v", in.GetName())
@@ -55,25 +61,49 @@ func joinCluster() {
 	var err error
 	var msg []byte
 
-	if sock, err = sub.NewSocket(); err != nil {
-		die("can't get new sub socket: %s", err.Error())
+	//if sock, err = sub.NewSocket(); err != nil {
+	//	die("can't get new sub socket: %s", err.Error())
+	//}
+
+	//log.Printf("Connecting to controller on: %s", controllerAddress)
+	//if err = sock.Dial(controllerAddress); err != nil {
+	//	die("can't dial on sub socket: %s", err.Error())
+	//}
+	// Empty byte array effectively subscribes to everything
+	//err = sock.SetOption(mangos.OptionSubscribe, []byte(""))
+	//if err != nil {
+	//	die("cannot subscribe: %s", err.Error())
+	//}
+
+	if sock, err = respondent.NewSocket(); err != nil {
+		die("can't get new respondent socket: %s", err.Error())
+	}
+	if err = sock.Dial(controllerAddress); err != nil {
+		die("can't dial on respondent socket: %s", err.Error())
 	}
 
-	log.Printf("Connecting to controller on: %s", controllerAddress)
-	if err = sock.Dial(controllerAddress); err != nil {
-		die("can't dial on sub socket: %s", err.Error())
-	}
-	// Empty byte array effectively subscribes to everything
-	err = sock.SetOption(mangos.OptionSubscribe, []byte(""))
-	if err != nil {
-		die("cannot subscribe: %s", err.Error())
-	}
 	for {
 		if msg, err = sock.Recv(); err != nil {
 			die("Cannot recv: %s", err.Error())
 		}
-		log.Printf("Message-Passing: Worker(%s): Received %s\n", workerName, string(msg))
+		fmt.Printf("Question: %s\n", string(msg))
+		//d := date()
+		fmt.Printf("Responfing my name\n")
+		if err = sock.Send([]byte(workerName)); err != nil {
+			die("Cannot send: %s", err.Error())
+		}
 	}
+
+	/*for{
+		msg = []byte("Worker conectado")
+		sock.Send(msg)
+	}*/
+	/*for {
+		if msg, err = sock.Recv(); err != nil {
+			die("Cannot recv: %s", err.Error())
+		}
+		log.Printf("Message-Passing: Worker(%s): Received %s\n", workerName, string(msg))
+	}*/
 }
 
 func getAvailablePort() int {

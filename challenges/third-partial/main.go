@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	//crand "crypto/rand"
 	"math/rand"
 	"time"
 	"net/http"
@@ -11,8 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"path/filepath"
 	"strconv"
-	"github.com/CodersSquad/dc-labs/challenges/third-partial/controller"
-	"github.com/CodersSquad/dc-labs/challenges/third-partial/scheduler"
+	//"github.com/CodersSquad/dc-labs/challenges/third-partial/controller"
+	//"github.com/CodersSquad/dc-labs/challenges/third-partial/scheduler"
+	"github.com/AcesTerra/controller"
+	"github.com/AcesTerra/scheduler"
 )
 
 // User struct to store users info.
@@ -123,6 +124,20 @@ func tokenGenerator() string {
 	return fmt.Sprintf("%x", b)
 }
 
+// Check worker status
+func workerStatus(c *gin.Context){
+	worker := c.Param("worker")
+	fmt.Println("Hello " + worker)
+	//Communicate with controller to check worker status
+	//status := controller.workerStatus()
+	//c.JSON(http.StatusOK, gin.H{"worker": worker, "time": current.Format("2006-01-02 15:04:05")})
+}
+
+// Run job test over worker
+func workerTest(c *gin.Context){
+	//controller.workerTest()
+}
+
 func main() {
 	log.Println("Welcome to the Distributed and Parallel Image Processing System")
 
@@ -136,7 +151,10 @@ func main() {
 	r.GET("/status", status)
 	r.GET("/logout", logout)
 	r.POST("/upload", uploadImage)
+	r.GET("/status/:worker", workerStatus)
+	r.GET("/workloads/test", workerTest)
 
+	//Start API
 	go r.Run() // Listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 
 	// Start Controller
@@ -155,6 +173,4 @@ func main() {
 		jobs <- sampleJob
 		time.Sleep(time.Second * 5)
 	}
-	// API
-	// Here's where your API setup will be
 }
