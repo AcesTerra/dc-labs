@@ -16,6 +16,9 @@ import (
 	"github.com/AcesTerra/scheduler"
 )
 
+var jobs = make(chan scheduler.Job)
+var rpcChan = make(chan string)
+
 // User struct to store users info.
 type user struct {
 	username string
@@ -133,7 +136,13 @@ func workerStatus(c *gin.Context){
 
 // Test job over worker
 func workerTest(c *gin.Context){
-	//controller.workerTest()
+	sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "test"}
+	jobs <- sampleJob
+	rpcResponse := <- rpcChan
+	//fmt.Println(rpcResponse)
+	//time.Sleep(time.Second * 5)
+	splitedResponse := strings.Split(rpcResponse, ";")
+	c.JSON(http.StatusOK, gin.H{"Workload":splitedResponse[0], "Job ID":splitedResponse[3], "Status":splitedResponse[1], "Usage":splitedResponse[2]})
 }
 
 func main() {
@@ -152,23 +161,13 @@ func main() {
 	r.GET("/status/:worker", workerStatus)
 	r.GET("/workloads/test", workerTest)
 
-	//Start API
-	go r.Run() // Listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-
 	// Start Controller
 	go controller.Start()
 
 	// Start Scheduler
-	jobs := make(chan scheduler.Job)
-	go scheduler.Start(jobs)
-	// Send sample jobs
-	sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "test"}
+	//jobs := make(chan scheduler.Job)
+	go scheduler.Start(jobs, rpcChan)
 
-	for {
-		b := make([]byte, 4)
-		rand.Read(b)
-		//sampleJob.RPCName = fmt.Sprintf("hello-%v", b)
-		jobs <- sampleJob
-		time.Sleep(time.Second * 5)
-	}
+	//Start API
+	r.Run() // Listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

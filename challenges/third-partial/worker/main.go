@@ -33,7 +33,7 @@ var (
 	controllerAddress = ""
 	workerName = ""
 	tags = ""
-	status = "running"
+	status = "Running"
 	usage = "50%"
 )
 
@@ -55,7 +55,8 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 // Test worker
 func (s *server) Test(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	log.Printf("RPC Received. Job: %v\n",in.GetName())
-	return &pb.HelloReply{Message: "Hello testing woker"}, nil
+	response := in.GetName() + ";" + status + ";" + "Done in worker " + workerName
+	return &pb.HelloReply{Message: response}, nil
 }
 
 func init() {
