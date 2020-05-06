@@ -51,6 +51,11 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 }
 
+func (s *server) Test(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	log.Printf("RPC Received. Job: Test\n")
+	return &pb.HelloReply{Message: "Hello testing woker"}, nil
+}
+
 func init() {
 	flag.StringVar(&controllerAddress, "controller", "tcp://localhost:40899", "Controller address")
 	flag.StringVar(&workerName, "worker-name", "hard-worker", "Worker Name")
