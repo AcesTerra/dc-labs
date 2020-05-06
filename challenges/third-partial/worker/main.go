@@ -30,8 +30,10 @@ type server struct {
 
 var (
 	controllerAddress = ""
-	workerName        = ""
-	tags              = ""
+	workerName = ""
+	tags = ""
+	status = "running"
+	usage = "50%"
 )
 
 func die(format string, v ...interface{}) {
@@ -89,7 +91,7 @@ func joinCluster() {
 		fmt.Printf("Question: %s\n", string(msg))
 		//d := date()
 		fmt.Printf("Responfing my name\n")
-		if err = sock.Send([]byte(workerName)); err != nil {
+		if err = sock.Send([]byte(workerName + ";" + tags + ";" + status + ";" + usage)); err != nil {
 			die("Cannot send: %s", err.Error())
 		}
 	}

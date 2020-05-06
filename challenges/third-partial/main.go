@@ -127,10 +127,10 @@ func tokenGenerator() string {
 // Check worker status
 func workerStatus(c *gin.Context){
 	worker := c.Param("worker")
-	fmt.Println("Hello " + worker)
+	//fmt.Println("Hello " + worker)
 	//Communicate with controller to check worker status
-	//status := controller.workerStatus()
-	//c.JSON(http.StatusOK, gin.H{"worker": worker, "time": current.Format("2006-01-02 15:04:05")})
+	tags,status,usage := controller.WorkerStatus(worker)
+	c.JSON(http.StatusOK, gin.H{"Worker":worker, "Tags":tags, "Status":status, "Usage":usage})
 }
 
 // Run job test over worker
