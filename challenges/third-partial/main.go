@@ -162,12 +162,12 @@ func main() {
 	jobs := make(chan scheduler.Job)
 	go scheduler.Start(jobs)
 	// Send sample jobs
-	sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "hello"}
+	sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "test"}
 
 	for {
 		b := make([]byte, 4)
 		rand.Read(b)
-		sampleJob.RPCName = fmt.Sprintf("hello-%v", b)
+		//sampleJob.RPCName = fmt.Sprintf("hello-%v", b)
 		jobs <- sampleJob
 		time.Sleep(time.Second * 5)
 	}

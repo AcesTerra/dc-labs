@@ -8,7 +8,8 @@ import (
 	"net"
 	"os"
 	"time"
-	pb "github.com/CodersSquad/dc-labs/challenges/third-partial/proto"
+	//pb "github.com/CodersSquad/dc-labs/challenges/third-partial/proto"
+	pb "github.com/AcesTerra/proto"
 	"go.nanomsg.org/mangos"
 	//"go.nanomsg.org/mangos/protocol/sub"
 	"google.golang.org/grpc"
@@ -51,8 +52,9 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 }
 
+// Test worker
 func (s *server) Test(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	log.Printf("RPC Received. Job: Test\n")
+	log.Printf("RPC Received. Job: %v\n",in.GetName())
 	return &pb.HelloReply{Message: "Hello testing woker"}, nil
 }
 
