@@ -10,12 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"path/filepath"
 	"strconv"
-	//"github.com/CodersSquad/dc-labs/challenges/third-partial/controller"
-	//"github.com/CodersSquad/dc-labs/challenges/third-partial/scheduler"
-	"github.com/AcesTerra/controller"
-	"github.com/AcesTerra/scheduler"
+	"github.com/AcesTerra/dc-labs/challenges/third-partial/controller"
+	"github.com/AcesTerra/dc-labs/challenges/third-partial/scheduler"
 )
 
+// Channels used for jobs
 var jobs = make(chan scheduler.Job)
 var rpcChan = make(chan string)
 
@@ -165,7 +164,6 @@ func main() {
 	go controller.Start()
 
 	// Start Scheduler
-	//jobs := make(chan scheduler.Job)
 	go scheduler.Start(jobs, rpcChan)
 
 	//Start API
