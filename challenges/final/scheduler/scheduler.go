@@ -4,9 +4,9 @@ import (
         "context"
         "log"
         "time"
-	"strconv"
-	pb "github.com/AcesTerra/dc-labs/challenges/final/proto"
-	"google.golang.org/grpc"
+        "strconv"
+        pb "github.com/AcesTerra/dc-labs/challenges/final/proto"
+        "google.golang.org/grpc"
 )
 
 const (
@@ -39,15 +39,15 @@ func schedule(job Job, response chan string){
         if err != nil {
                 log.Fatalf("could not greet: %v", err)
         }
-	idJob++
+        idJob++
         log.Printf("Scheduler: RPC respose from %s : %s", job.Address, r.GetMessage())
-	rpcResponse := r.GetMessage() + ";" + strconv.Itoa(idJob)
-	response <- rpcResponse
+        rpcResponse := r.GetMessage() + ";" + strconv.Itoa(idJob)
+        response <- rpcResponse
 }
 
 // Waits for a job to be executed
 func Start(jobs chan Job, response chan string) error {
-	for{
+        for{
                 job := <-jobs
                 schedule(job, response)
         }

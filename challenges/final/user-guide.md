@@ -65,3 +65,14 @@ $ curl -H "Authorization: Bearer <ACCESS_TOKEN>" http://localhost:8080/workloads
         "Result: "Done in Worker: <worker_name>"
 }
 ```
+
+- **Execute Filter Workload**
+```
+$ curl -F 'data=@path/to/local/image.png' -F 'workload-id=my-filters' -F 'filter=grayscale' -H "Authorization: Bearer <ACCESS_TOKEN>" http://localhost:8080/workloads/filter
+{
+        "Workload": "test",
+        "Job ID": "1",
+        "Status": "Scheduling",
+        "Result: "Done in Worker: <worker_name>"
+}
+```

@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"github.com/AcesTerra/dc-labs/challenges/final/controller"
 	"github.com/AcesTerra/dc-labs/challenges/final/scheduler"
-	"github.com/gin-contrib/static"
+	//"github.com/gin-contrib/static"
 	//"github.com/gin-gonic/gin"
 )
 
@@ -141,16 +141,20 @@ func workerTest(c *gin.Context){
 	token := bearer[0]
 	splitedToken := strings.Split(token, " ")
 	t := string(splitedToken[1])
+	//var userToken string
 	isRegistered := false
 	for _,v := range allUsers{
 		if (v.token == t){
 			isRegistered = true
+			//userToken = v.token
 		}
 	}
 	if (isRegistered){
 		sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "test"}
 		jobs <- sampleJob
 		rpcResponse := <- rpcChan
+		//fmt.Println(rpcResponse)
+		//time.Sleep(time.Second * 5)
 		splitedResponse := strings.Split(rpcResponse, ";")
 		c.JSON(http.StatusOK, gin.H{"Workload":splitedResponse[0], "Job ID":splitedResponse[3], "Status":splitedResponse[1], "Usage":splitedResponse[2]})
 	}
@@ -161,28 +165,39 @@ func filter(c *gin.Context){
 	token := bearer[0]
 	splitedToken := strings.Split(token, " ")
 	t := string(splitedToken[1])
+	//var userToken string
 	isRegistered := false
 	for _,v := range allUsers{
 		if (v.token == t){
 			isRegistered = true
+			//userToken = v.token
 		}
 	}
 	if (isRegistered){
 		workloadId,_ := c.GetPostForm("workload-id")
 		filter,_ := c.GetPostForm("filter")
+		//file,_ := c.GetPostForm("data")
+		//fmt.Println("Entered function")
 		file, err := c.FormFile("data")
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{"message": "Error uploading image", "error": err.Error})
 			return
 		}
+		//fileName := filepath.Base(file.Filename)
+		//uploadedImage := filepath.Base(file.Filename)
 		fileName := filepath.Base(file.Filename)
-		fileName = "worker/" + filepath.Base(file.Filename)
 		if err := c.SaveUploadedFile(file, fileName); err != nil {
 			c.JSON(http.StatusOK, gin.H{"message": "Error uploading image", "error": err.Error})
 			return
 		}
+		//fmt.Println(workloadId)
+		//fmt.Println(filter)
 		jobID := controller.GetWorkloadJobId(workloadId)
 		strJobID := strconv.Itoa(jobID)
+		//fmt.Println(jobID)
+		//sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "test"}
+		//sampleJob := scheduler.Job{Address: "localhost:50051", RPCName: "test"}
+		//jobs <- sampleJob
 		c.JSON(http.StatusOK, gin.H{"Workload ID": workloadId, "Filter":filter, "Job ID":strJobID, "Status":"Scheduling", "Results":"http://localhost:8080/results/", "File":fileName})
 	}
 }
@@ -203,9 +218,12 @@ func main() {
 	r.GET("/status/:worker", workerStatus)
 	r.GET("/workloads/test", workerTest)
 	r.POST("/workloads/filter", filter)
-
-	r.Use(static.Serve("/results", static.LocalFile("/home/alfredo/dc-labs/challenges/final/results", true)))
-	//router.Use(static.Serve("/", static.LocalFile("/results", true)))
+	/*r.Use(static.Serve("/results", static.LocalFile("/tmp", false)))
+	r.GET("/ping", func(c *gin.Context) {
+		c.String(200, "test")
+	})*/
+	//r.Static("/results", "./results")
+	//r.StaticFS("/results", http.Dir("my_file_system"))
 
 	// Start Controller
 	go controller.Start()
@@ -214,5 +232,5 @@ func main() {
 	go scheduler.Start(jobs, rpcChan)
 
 	//Start API
-	r.Run(":8080") // Listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run() // Listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
